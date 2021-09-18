@@ -1,0 +1,14 @@
+session:
+  key: CaY5iCkYtN7DqXdiYK1BvmGrQuaSA4Tl4bEk9my0jc0=
+admin:
+  email: admin@admin.com
+  password: admin
+bot:
+  token: 3f8b0fb2a582bca1d3e85fe23839db6ec2750bf6b1a8bbae37ad0ccaa4e22e0e1e73d6f2d43123bb0fad8
+  group_id: 206753078
+database:
+  host: 0.0.0.0
+  port: 5432
+  user: postgres
+  password: postgres
+  database: postgres
