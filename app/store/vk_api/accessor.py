@@ -89,9 +89,9 @@ class VkApiAccessor(BaseAccessor):
                     Update(
                         type=update["type"],
                         object=UpdateObject(
-                            id=update["object"]["id"],
-                            user_id=update["object"]["user_id"],
-                            body=update["object"]["body"],
+                            id=update["object"]["message"]["id"],
+                            user_id=update["object"]["message"]["peer_id"],
+                            body=update["object"]["message"]["text"],
                         ),
                     )
                 )
@@ -103,9 +103,8 @@ class VkApiAccessor(BaseAccessor):
                 API_PATH,
                 "messages.send",
                 params={
-                    "user_id": message.user_id,
+                    "peer_id": message.user_id,
                     "random_id": random.randint(1, 2 ** 32),
-                    "peer_id": "-" + str(self.app.config.bot.group_id),
                     "message": message.text,
                     "access_token": self.app.config.bot.token,
                 },
