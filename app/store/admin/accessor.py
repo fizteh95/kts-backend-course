@@ -19,13 +19,11 @@ class AdminAccessor(BaseAccessor):
     async def disconnect(self, app: "Application"):
         await AdminModel.delete.gino.all()
 
-    async def get_by_email(self, email: str) -> Optional[Admin]:  # noQA
-        # raise NotImplementedError
+    async def get_by_email(self, email: str) -> Optional[Admin]:
         admin = await AdminModel.query.where(AdminModel.email == email).gino.first()
         if admin:
             return Admin(id=admin.id, email=admin.email, password=sha256(admin.password.encode()).hexdigest())
 
     async def create_admin(self, email: str, password: str) -> Admin:
-        # raise NotImplementedError
         admin = await AdminModel.create(email=email, password=password)
         return admin

@@ -14,8 +14,8 @@ class BotManager:
         self.logger = getLogger("handler")
 
     async def handle_updates(self, updates: list[Update]):
-        # if not updates:
-        #     return
+        if not updates:
+            return
         for update in updates:
             await self.app.store.vk_api.send_message(
                 Message(

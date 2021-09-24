@@ -14,7 +14,7 @@ class Database:
 
     async def connect(self, *_, **kw):
         self.db = db
-        self._engine = await self.db.set_bind(  # gino.create_engine
+        self._engine = await self.db.set_bind(
             URL(
                 drivername="asyncpg",
                 host=self.app.config.database.host,
@@ -29,7 +29,6 @@ class Database:
         self.db.bind = self._engine
 
     async def disconnect(self, *_, **kw):
-        # raise NotImplementedError
         # if self.db:
         #     await self.db.bind.close()
         print('database disconnected')

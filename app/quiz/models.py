@@ -10,16 +10,12 @@ class Theme:
     title: str
 
 
-# TODO
-# Дописать все необходимые поля модели
 class ThemeModel(db.Model):
     __tablename__ = "themes"
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(), nullable=False, unique=True)
 
 
-# TODO
-# Дописать все необходимые поля модели
 class AnswerModel(db.Model):
     __tablename__ = "answers"
     id = db.Column(db.Integer(), primary_key=True, nullable=False)
@@ -36,8 +32,6 @@ class Question:
     answers: list["Answer"]
 
 
-# TODO
-# Дописать все необходимые поля модели
 class QuestionModel(db.Model):
     __tablename__ = "questions"
     id = db.Column(db.Integer(), primary_key=True)
