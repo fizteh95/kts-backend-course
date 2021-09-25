@@ -1,3 +1,4 @@
+import json
 import random
 import typing
 from typing import Optional
@@ -106,6 +107,28 @@ class VkApiAccessor(BaseAccessor):
                     "peer_id": message.user_id,
                     "random_id": random.randint(1, 2 ** 32),
                     "message": message.text,
+                    "access_token": self.app.config.bot.token,
+                },
+            )
+        ) as resp:
+            data = await resp.json()
+            self.logger.info(data)
+
+    async def send_keyboard(self, user_id: int, main_text: str, texts: list) -> None:
+        keyboard = {"one_time": False, "buttons": [], "inline": True}
+        for text in texts:
+            action = {"type": "text", "label": text, "payload": ""}
+            res = {"action": action, "color": "secondary"}
+            keyboard["buttons"].append([res])
+        async with self.session.get(
+            self._build_query(
+                API_PATH,
+                "messages.send",
+                params={
+                    "peer_id": user_id,
+                    "random_id": random.randint(1, 2 ** 32),
+                    "message": main_text,
+                    "keyboard": json.dumps(keyboard),
                     "access_token": self.app.config.bot.token,
                 },
             )

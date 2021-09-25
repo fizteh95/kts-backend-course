@@ -78,6 +78,24 @@ class QuizAccessor(BaseAccessor):
                 res.answers.append(Answer(title=a.answers[0].title, is_correct=a.answers[0].is_correct))
         return res
 
+    async def get_question_by_id(self, id_: int) -> Optional[Question]:
+        question = await (
+            QuestionModel
+            .join(AnswerModel, QuestionModel.id == AnswerModel.question_ref)
+            .select()
+            .where(QuestionModel.id == id_)
+            .gino
+            .load(QuestionModel.load(answers=AnswerModel))
+            .all()
+        )
+        res = None
+        if question:
+            q = question[0]
+            res = Question(id=q.id, theme_id=q.theme_id, title=q.title, answers=[])
+            for a in question:
+                res.answers.append(Answer(title=a.answers[0].title, is_correct=a.answers[0].is_correct))
+        return res
+
     async def list_questions(self, theme_id: Optional[int] = None) -> List[Question]:
         questions = defaultdict(Question)
         answers = defaultdict(list)
@@ -111,4 +129,5 @@ class QuizAccessor(BaseAccessor):
         for question in questions.values():
             res.append(question)
             res[-1].answers = answers[question.title]
+        res.sort(key=lambda x: x.id)
         return res
