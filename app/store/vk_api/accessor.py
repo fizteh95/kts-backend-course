@@ -1,3 +1,4 @@
+import json
 import random
 import typing
 from typing import Optional
@@ -89,9 +90,9 @@ class VkApiAccessor(BaseAccessor):
                     Update(
                         type=update["type"],
                         object=UpdateObject(
-                            id=update["object"]["id"],
-                            user_id=update["object"]["user_id"],
-                            body=update["object"]["body"],
+                            id=update["object"]["message"]["id"],
+                            user_id=update["object"]["message"]["peer_id"],
+                            body=update["object"]["message"]["text"],
                         ),
                     )
                 )
@@ -103,10 +104,31 @@ class VkApiAccessor(BaseAccessor):
                 API_PATH,
                 "messages.send",
                 params={
-                    "user_id": message.user_id,
+                    "peer_id": message.user_id,
                     "random_id": random.randint(1, 2 ** 32),
-                    "peer_id": "-" + str(self.app.config.bot.group_id),
                     "message": message.text,
+                    "access_token": self.app.config.bot.token,
+                },
+            )
+        ) as resp:
+            data = await resp.json()
+            self.logger.info(data)
+
+    async def send_keyboard(self, user_id: int, main_text: str, texts: list) -> None:
+        keyboard = {"one_time": False, "buttons": [], "inline": True}
+        for text in texts:
+            action = {"type": "text", "label": text, "payload": ""}
+            res = {"action": action, "color": "secondary"}
+            keyboard["buttons"].append([res])
+        async with self.session.get(
+            self._build_query(
+                API_PATH,
+                "messages.send",
+                params={
+                    "peer_id": user_id,
+                    "random_id": random.randint(1, 2 ** 32),
+                    "message": main_text,
+                    "keyboard": json.dumps(keyboard),
                     "access_token": self.app.config.bot.token,
                 },
             )

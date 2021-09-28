@@ -1,8 +1,8 @@
 """First migration.
 
-Revision ID: 2e066540f754
+Revision ID: fdf795d3179b
 Revises: 
-Create Date: 2021-09-18 15:28:52.317474
+Create Date: 2021-09-27 19:02:45.399175
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2e066540f754'
+revision = 'fdf795d3179b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,13 @@ def upgrade():
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('sessions',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('client', sa.Integer(), nullable=False),
+    sa.Column('session', sa.String(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('client')
     )
     op.create_table('themes',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -55,5 +62,6 @@ def downgrade():
     op.drop_table('answers')
     op.drop_table('questions')
     op.drop_table('themes')
+    op.drop_table('sessions')
     op.drop_table('admins')
     # ### end Alembic commands ###

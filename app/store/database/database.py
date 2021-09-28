@@ -2,6 +2,7 @@ from gino.api import Gino
 from app.store.database.gino import db
 from app.admin.models import *
 from app.quiz.models import *
+from app.bot.models import *
 from sqlalchemy.engine.url import URL
 
 
